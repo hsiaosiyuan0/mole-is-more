@@ -42,7 +42,7 @@ window.require(["vs/editor/editor.main"], function () {
 (async () => {
   const go = new Go();
   const response = await fetch(
-    "https://blog.thehardways.me/mole-is-more/src/assets/mole.wasm"
+    "https://blog.thehardways.me/mole-is-more/assets/mole.wasm"
   );
   const buffer = await response.arrayBuffer();
   const mod = await WebAssembly.compile(buffer);
