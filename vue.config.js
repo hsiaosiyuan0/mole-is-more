@@ -1,8 +1,16 @@
 const path = require("path");
+const CopyPlugin = require("copy-webpack-plugin");
 
 module.exports = {
   outputDir: path.resolve(__dirname, "docs"),
   publicPath: process.env.NODE_ENV == "production" ? "/mole-is-more" : "/",
+  configureWebpack: {
+    plugins: [
+      new CopyPlugin({
+        patterns: [{ from: "src/assets", to: "assets" }],
+      }),
+    ],
+  },
   chainWebpack: (config) => {
     config.resolve.symlinks(false);
 
