@@ -1,12 +1,15 @@
 import Vue from "vue";
+import VTooltip from "v-tooltip";
 import App from "./App.vue";
 import router from "./router";
 import store from "./store";
 import "./wasm_exec";
 
-import wasm from "!!raw-loader!./assets/mole.wasm";
+import "v-tooltip/dist/v-tooltip.css";
 
 Vue.config.productionTip = false;
+
+Vue.use(VTooltip);
 
 window.require.config({
   paths: {
@@ -36,24 +39,13 @@ window.require(["vs/editor/editor.main"], function () {
   }).$mount("#app");
 });
 
-async function string2ArrayBuffer(string) {
-  let resolve;
-  const p = new Promise((r) => (resolve = r));
-
-  var f = new FileReader();
-  f.onload = function (e) {
-    resolve(e.target.result);
-  };
-  console.log(string)
-  f.readAsArrayBuffer(new Blob([string], { type: "text/plain;charset=utf8" }));
-  return p;
-}
-
 (async () => {
   const go = new Go();
-  const mod = await WebAssembly.compile(await string2ArrayBuffer(wasm));
+  const response = await fetch(
+    "https://blog.thehardways.me/mole-is-more/src/assets/mole.wasm"
+  );
+  const buffer = await response.arrayBuffer();
+  const mod = await WebAssembly.compile(buffer);
   const inst = await WebAssembly.instantiate(mod, go.importObject);
-  go.run(inst);
-
-  console.log(global.compile(`"hello world"`));
+  await go.run(inst);
 })();

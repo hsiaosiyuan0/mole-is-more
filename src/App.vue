@@ -2,10 +2,32 @@
   <div id="app">
     <div id="nav">
       <div id="title">
-        <a href="https://github.com/hsiaosiyuan0/mole" target="_blank">mole</a>
-      </div>
-      <div class="desc">
-        Paste your JavaScript source in left panel and see its AST in right panel. The parser is written in golang and as a sub-module in mole, running in this page via construct it into WASM
+        <div class="inner">
+          <VDropdown>
+            <span class="mark">?</span>
+            <template #popper>
+              <div class="desc">
+                <p>
+                  <a href="https://github.com/hsiaosiyuan0/mole" target="_blank"
+                    >Mole</a
+                  >
+                  is a toolkit written in Golang provides various
+                  functionalities to process source code of the frontend
+                  projects.
+                </p>
+                <p>
+                  This page is for demonstrating the JavaScript Parser shipped
+                  within Mole which is running directly in this page base on
+                  WASM.
+                </p>
+                <p>
+                  Paste your JavaScript code in left panel and see its AST in
+                  right panel.
+                </p>
+              </div>
+            </template>
+          </VDropdown>
+        </div>
       </div>
     </div>
 
@@ -14,20 +36,34 @@
 </template>
 
 <style>
-#app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Monaco, Menlo, Consolas, Bitstream Vera Sans Mono, monospace;
 }
+
+.mark {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-weight: bold;
+  margin-left: 10px;
+  font-size: 40px;
+}
+
+.v-popper__inner {
+  padding: 0 20px !important;
+}
+
 #nav {
   /* padding: 30px; */
   text-align: center;
 }
 
-#title {
-  display: block;
+#title .inner {
+  display: flex;
   font-size: 30px;
+  margin: 0 auto;
+  justify-content: flex-end;
+  padding-right: 20px;
 }
 
 .desc {

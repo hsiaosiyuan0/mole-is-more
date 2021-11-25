@@ -7,10 +7,6 @@ export default new Router({
   routes: [
     {
       path: "/",
-      redirect: '/ast'
-    },
-    {
-      path: "/ast",
       name: "ast",
       component: () =>
         import(/* webpackChunkName: "ast" */ "./views/AST.vue")

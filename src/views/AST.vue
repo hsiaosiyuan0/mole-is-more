@@ -6,20 +6,22 @@
       language="javascript"
       :amdRequire="amdRequire"
       :options="editorCfg"
-    ></monaco-editor>
+    >
+    </monaco-editor>
     <vue-json-pretty
+      v-if="!error"
       class="json-viewer"
-      :path="'res'"
       :data="ast"
+      showLength
     ></vue-json-pretty>
+    <div>{{ error }}</div>
   </div>
 </template>
 
 <script>
 import MonacoEditor from "vue-monaco";
 import VueJsonPretty from "vue-json-pretty";
-
-// amdRequire = window.require;
+import "vue-json-pretty/lib/styles.css";
 
 export default {
   data() {
@@ -28,9 +30,11 @@ export default {
         minimap: {
           enabled: false,
         },
+        fontSize: "14px",
       },
       code: "",
       ast: {},
+      error: "",
     };
   },
   watch: {
@@ -40,6 +44,19 @@ export default {
   },
   methods: {
     amdRequire: window.require,
+    compile(code) {
+      if (!global.compile) return;
+
+      const [json, err] = global.compile(code);
+      if (err) {
+        this.error = err;
+        return;
+      }
+      this.ast = JSON.parse(json);
+    },
+  },
+  mounted() {
+    this.code = `console.log("hello mole")`;
   },
   components: {
     MonacoEditor,
@@ -50,7 +67,6 @@ export default {
 
 <style>
 .two-split {
-  margin-top: 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -58,12 +74,13 @@ export default {
 
 .editor {
   width: 50%;
-  height: calc(100vh - 30px);
+  height: calc(100vh - 50px);
 }
 
 .json-viewer {
+  background-color: #f9f9f9;
   width: 49%;
-  height: calc(100vh - 30px);
+  height: calc(100vh - 50px);
   overflow: scroll;
 }
 </style>
