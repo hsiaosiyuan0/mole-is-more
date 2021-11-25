@@ -14,7 +14,7 @@
       :data="ast"
       showLength
     ></vue-json-pretty>
-    <div>{{ error }}</div>
+    <div v-if="error" class="error">{{ error }}</div>
   </div>
 </template>
 
@@ -52,6 +52,7 @@ export default {
         this.error = err;
         return;
       }
+      this.error = "";
       this.ast = JSON.parse(json);
     },
   },
@@ -77,11 +78,17 @@ export default {
   height: calc(100vh - 50px);
 }
 
-.json-viewer {
+.json-viewer,
+.error {
   background-color: #f9f9f9;
   width: 49%;
   height: calc(100vh - 50px);
   overflow: scroll;
+}
+
+.error {
+  box-sizing: border-box;
+  padding: 10px 20px;
 }
 </style>
 
