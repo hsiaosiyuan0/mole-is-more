@@ -1,5 +1,6 @@
 import Vue from "vue";
 import VTooltip from "v-tooltip";
+import { EventBus, EVENT_WASM_READY } from "./event";
 import App from "./App.vue";
 import router from "./router";
 import store from "./store";
@@ -47,5 +48,10 @@ window.require(["vs/editor/editor.main"], function () {
   const buffer = await response.arrayBuffer();
   const mod = await WebAssembly.compile(buffer);
   const inst = await WebAssembly.instantiate(mod, go.importObject);
+
+  setTimeout(() => {
+    EventBus.emit(EVENT_WASM_READY);
+  }, 300);
+
   await go.run(inst);
 })();

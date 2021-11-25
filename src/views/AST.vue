@@ -14,13 +14,23 @@
       :data="ast"
       showLength
     ></vue-json-pretty>
-    <div v-if="error" class="error">{{ error }}</div>
+    <div v-if="error" class="error">
+      <div>{{ error }}</div>
+      <div class="issue">
+       Looks like a bug? Help to improve mole by firing an
+        <a href="https://github.com/hsiaosiyuan0/mole/issues" target="_blank"
+          >Issue</a
+        > :)
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import MonacoEditor from "vue-monaco";
 import VueJsonPretty from "vue-json-pretty";
+import { EventBus, EVENT_WASM_READY } from "../event";
+
 import "vue-json-pretty/lib/styles.css";
 
 export default {
@@ -58,6 +68,12 @@ export default {
   },
   mounted() {
     this.code = `console.log("hello mole")`;
+
+    EventBus.on(EVENT_WASM_READY, () => {
+      if (this.error === "" && this.code !== "") {
+        this.compile(this.code);
+      }
+    });
   },
   components: {
     MonacoEditor,
@@ -89,6 +105,10 @@ export default {
 .error {
   box-sizing: border-box;
   padding: 10px 20px;
+}
+
+.issue {
+  padding-top: 30px;
 }
 </style>
 
