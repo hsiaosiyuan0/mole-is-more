@@ -19,6 +19,8 @@
       @click="handleAstClick"
       showLength
       showLine
+      selectable-type="multiple"
+      :value="selected"
     ></vue-json-pretty>
 
     <div v-if="!error && ast" @click="copy" class="copy">copy</div>
@@ -41,6 +43,7 @@ import MonacoEditor from "vue-monaco";
 import VueJsonPretty from "@hsiaosy0/vue-json-pretty";
 import get from "lodash.get";
 import { EventBus, EVENT_WASM_READY } from "../event";
+import { walk } from "../walk";
 
 import "@hsiaosy0/vue-json-pretty/lib/styles.css";
 
@@ -64,6 +67,7 @@ export default {
           options: {},
         },
       ],
+      selected: [],
     };
   },
   watch: {
@@ -85,6 +89,8 @@ export default {
       this.ast = JSON.parse(json);
     },
     handleAstClick(path) {
+      this.selected = [];
+
       if (!this.editor) return;
 
       const node = getNode(this.ast, path);
@@ -110,11 +116,10 @@ export default {
         this.prevDecorations.slice(0),
         newDecorations
       );
-
-      console.log(2);
     },
     editorDidMount(editor) {
       this.editor = editor;
+      this.editor.onMouseDown(this.handleEditorClick);
     },
     copy() {
       this.$copyText(JSON.stringify(this.ast)).then(
@@ -125,6 +130,62 @@ export default {
           this.$notify({ type: "error", text: "failed to copy: " + e });
         }
       );
+    },
+    handleEditorClick(e) {
+      if (!this.ast) return;
+
+      this.prevDecorations = this.editor.deltaDecorations(
+        this.prevDecorations.slice(0),
+        []
+      );
+
+      const { lineNumber, column } = e.target.position;
+      let node = null;
+      let path = "";
+      walk(
+        this.ast,
+        (n, p) => {
+          const { start, end } = n.loc;
+          const inRange =
+            lineNumber >= start.line &&
+            column >= start.column + 1 &&
+            lineNumber <= end.line &&
+            column <= end.column + 1;
+          if (inRange) {
+            node = n;
+            path = p;
+          }
+          return true;
+        },
+        "root"
+      );
+
+      if (node) {
+
+        // you'll never want to known about below code
+        // it's just for highlighting the nodes
+        const objs = [{ node, path: path }];
+        let keys = [];
+        while (objs.length) {
+          const { node, path } = objs.pop();
+          const ks = Object.keys(node).map((k) => {
+            const prop = node[k];
+            const key = `${path}.${k}`;
+            if (Object.prototype.toString.call(prop) === "[object Object]") {
+              objs.push({ node: prop, path: key });
+            } else if (Array.isArray(prop)) {
+              prop.forEach((p, i) => {
+                keys.push(`${key}[${i}]`);
+                objs.push({ node: p, path: `${key}[${i}]` });
+              });
+            }
+            return key;
+          });
+          keys = [...keys, ...ks];
+        }
+
+        this.selected = [path, ...keys];
+      }
     },
   },
   mounted() {
@@ -185,7 +246,7 @@ function getNode(ast, path) {
 }
 
 .hg {
-  background: lightblue;
+  background: #e6f7ff;
 }
 
 .copy {

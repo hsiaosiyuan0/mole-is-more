@@ -24,6 +24,14 @@
                   Paste your JavaScript code in left panel and see its AST in
                   right panel.
                 </p>
+                <p>
+                  This is the
+                  <a
+                    href="https://github.com/hsiaosiyuan0/mole-is-more"
+                    target="_blank"
+                    >source code</a
+                  > of this craft, if you're interested in what happens internally :)
+                </p>
               </div>
             </template>
           </VDropdown>
