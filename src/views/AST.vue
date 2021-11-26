@@ -145,6 +145,8 @@ export default {
       walk(
         this.ast,
         (n, p) => {
+          if (!n.loc) return;
+
           const { start, end } = n.loc;
           const inRange =
             lineNumber >= start.line &&
@@ -161,7 +163,6 @@ export default {
       );
 
       if (node) {
-
         // you'll never want to known about below code
         // it's just for highlighting the nodes
         const objs = [{ node, path: path }];
@@ -189,7 +190,19 @@ export default {
     },
   },
   mounted() {
-    this.code = `console.log("hello mole")`;
+    this.code = `/**
+ * Go Is The Future of JavaScript Infrastructure.
+ */
+
+let tips = [
+  "Hovering over a node highlights the \\
+   corresponding location in the source code"
+];
+
+function printTips() {
+  tips.forEach((tip, i) => console.log(\`Tip \${i}:\` + tip));
+}
+`;
 
     EventBus.on(EVENT_WASM_READY, () => {
       if (this.error === "" && this.code !== "") {
