@@ -7,18 +7,22 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
+    "@hsiaosy0/vue-json-pretty": "^1.8.1",
     "core-js": "^2.6.5",
     "cors": "^2.8.5",
     "events": "^3.3.0",
     "express": "^4.17.0",
+    "lodash.get": "^4.4.2",
     "v-tooltip": "^3.0.0-beta.1",
     "vue": "^2.6.10",
-    "vue-json-pretty": "^1.8.2",
+    "vue-clipboard2": "^0.3.3",
     "vue-monaco": "^0.3.2",
+    "vue-notification": "^1.3.20",
     "vue-router": "^3.0.3",
     "vuex": "^3.0.1"
   },
   "devDependencies": {
+    "@types/lodash.get": "^4.4.6",
     "@vue/cli-plugin-babel": "^3.7.0",
     "@vue/cli-service": "^3.7.0",
     "copy-webpack-plugin": "^6.4.1",

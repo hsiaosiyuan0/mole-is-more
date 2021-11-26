@@ -1,5 +1,7 @@
 import Vue from "vue";
 import VTooltip from "v-tooltip";
+import VueClipboard from "vue-clipboard2";
+import Notifications from 'vue-notification'
 import { EventBus, EVENT_WASM_READY } from "./event";
 import App from "./App.vue";
 import router from "./router";
@@ -11,6 +13,8 @@ import "v-tooltip/dist/v-tooltip.css";
 Vue.config.productionTip = false;
 
 Vue.use(VTooltip);
+Vue.use(VueClipboard);
+Vue.use(Notifications)
 
 window.require.config({
   paths: {
