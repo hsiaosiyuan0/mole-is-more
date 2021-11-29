@@ -195,7 +195,7 @@ export default {
  */
 
 let tips = [
-  "Hovering over a node highlights the \\
+  "Clicking a node highlights the \\
    corresponding location in the source code"
 ];
 
