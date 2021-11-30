@@ -160,6 +160,39 @@ export function walk(node, cb, path) {
     case "ExportAllDeclaration":
       if (!walk(node.exported, cb, path + ".exported")) return false;
       return walk(node.source, cb, path + ".source");
+
+    case "JSXElement":
+    case "JSXFragment":
+      if (!walk(node.openingElement, cb, path + ".openingElement"))
+        return false;
+      if (!walk(node.children, cb, path + ".children")) return false;
+      return walk(node.closingElement, cb, path + ".closingElement");
+    case "JSXOpeningElement":
+      if (!walk(node.name, cb, path + ".name")) return false;
+      return walk(node.attributes, cb, path + ".attributes");
+    case "JSXIdentifier":
+      return walk(node.name, cb, path + ".name");
+    case "JSXNamespacedName":
+      if (!walk(node.namespace, cb, path + ".namespace")) return false;
+      return walk(node.name, cb, path + ".name");
+    case "JSXMemberExpression":
+      if (!walk(node.object, cb, path + ".object")) return false;
+      return walk(node.property, cb, path + ".property");
+    case "JSXClosingElement":
+      return walk(node.name, cb, path + ".name");
+    case "JSXOpeningFragment":
+    case "JSXClosingFragment":
+    case "JSXText":
+    case "JSXEmptyExpression":
+      break;
+    case "JSXExpressionContainer":
+    case "JSXSpreadChild":
+      return walk(node.expression, cb, path + ".expression");
+    case "JSXSpreadAttribute":
+      return walk(node.argument, cb, path + ".argument");
+    case "JSXAttribute":
+      if (!walk(node.name, cb, path + ".name")) return false;
+      return walk(node.value, cb, path + ".value");
   }
   return true;
 }

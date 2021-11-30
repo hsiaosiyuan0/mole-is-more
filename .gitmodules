@@ -1,0 +1,3 @@
+[submodule "mole"]
+	path = mole
+	url = git@github.com:hsiaosiyuan0/mole.git

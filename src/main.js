@@ -1,7 +1,7 @@
 import Vue from "vue";
 import VTooltip from "v-tooltip";
 import VueClipboard from "vue-clipboard2";
-import Notifications from 'vue-notification'
+import Notifications from "vue-notification";
 import { EventBus, EVENT_WASM_READY } from "./event";
 import App from "./App.vue";
 import router from "./router";
@@ -14,7 +14,7 @@ Vue.config.productionTip = false;
 
 Vue.use(VTooltip);
 Vue.use(VueClipboard);
-Vue.use(Notifications)
+Vue.use(Notifications);
 
 window.require.config({
   paths: {
@@ -37,6 +37,23 @@ window.MonacoEnvironment = {
 };
 
 window.require(["vs/editor/editor.main"], function () {
+  monaco.languages.typescript.typescriptDefaults.setDiagnosticsOptions({
+    noSemanticValidation: false,
+    noSyntaxValidation: false,
+  });
+
+  monaco.languages.typescript.typescriptDefaults.setCompilerOptions({
+    target: monaco.languages.typescript.ScriptTarget.Latest,
+    allowNonTsExtensions: true,
+    moduleResolution: monaco.languages.typescript.ModuleResolutionKind.NodeJs,
+    module: monaco.languages.typescript.ModuleKind.CommonJS,
+    noEmit: true,
+    esModuleInterop: true,
+    jsx: monaco.languages.typescript.JsxEmit.React,
+    reactNamespace: "React",
+    allowJs: true,
+  });
+
   new Vue({
     router,
     store,

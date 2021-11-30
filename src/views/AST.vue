@@ -199,8 +199,8 @@ let tips = [
    corresponding location in the source code"
 ];
 
-function printTips() {
-  tips.forEach((tip, i) => console.log(\`Tip \${i}:\` + tip));
+function Tips() {
+  return <>{tips.map((tip, i) => <div key={i}>{\`Tip \${i}:\` + tip}</div>)}</>;
 }
 `;
 
