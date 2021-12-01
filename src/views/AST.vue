@@ -186,6 +186,12 @@ export default {
         }
 
         this.selected = [path, ...keys];
+        this.$nextTick(() => {
+          const el = document.querySelector(".is-highlight");
+          if (el) {
+            el.scrollIntoView({ behavior: "smooth" });
+          }
+        });
       }
     },
   },
