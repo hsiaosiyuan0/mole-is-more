@@ -5,7 +5,7 @@ export function walk(node, cb, path) {
       const key = `${path}[${i}]`;
       return walk(node, cb, key);
     });
-  if (!cb(node, path)) return false;
+  if (cb(node, path) === false) return false;
 
   switch (node.type) {
     case "Program":
