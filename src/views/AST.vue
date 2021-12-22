@@ -197,7 +197,7 @@ export default {
   },
   mounted() {
     this.code = `/**
- * Go Is The Future of JavaScript Infrastructure.
+ * Winning is nice if you don't lose your integrity in the process.
  */
 
 let tips = [
